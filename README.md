@@ -1,4 +1,4 @@
-# Magnitude, Velocity, and Acceleration Estimation with Kalman Filter (AS5600)
+# Magnitude, Velocity, and Acceleration Estimation with Kalman Filter
 
 *Read in other languages: [Português](README.pt-br.md)*
 
@@ -70,7 +70,7 @@ $$\mathbf{x} = \begin{bmatrix} \theta \\ \omega \\ \alpha \end{bmatrix} \begin{m
 The parameter $R$ defines the variance of the electrical/magnetic noise in the sensor reading.
 *   **Datasheet Calculation:** For example, in the case of the AS5600 sensor, the raw RMS noise (1-Sigma) is $0.06^\circ$. Thus, the corresponding ideal variance is:
     $$R = (0.06^\circ)^2 = 0.0036\text{ (degrees)}^2$$
-*   **Practical Tuning:** To deal with mechanical backlash, vibration, and magnet eccentricities in the real world, the firmware was tuned with:
+*   **Practical Tuning:** To deal with mechanical backlash, vibration, and sensor imperfections in the real world, the filter (when tuned for the AS5600) was configured with:
     $$R \approx 0.018\text{ (degrees)}^2$$
 
 ### Process Noise ($\mathbf{Q}$)
@@ -123,11 +123,12 @@ Unlike shallow content aimed only at clicks, this repository delivers:
 
 ---
 
-## 🛠️ Technologies
-- **Target Hardware:** ESP32 / ESP32-S3
-- **Framework:** ESP-IDF v5.x / v6.x
-- **Language:** C / C++
-- **Simulation:** LTSpice (Sensor Modeling)
+## 🛠️ Technologies and Compatibility
+- **Language:** Pure C (C99 or higher) and C++
+- **Target Hardware:** Any microcontroller architecture (ESP32, STM32, ARM Cortex, RISC-V, AVR, etc.) or desktop architecture
+- **Environments/RTOS:** ESP-IDF (as a native Component), Zephyr RTOS, FreeRTOS, Bare-metal, Desktop (Windows, Linux, macOS)
+- **Build System:** Native CMake
+- **Simulation:** LTSpice (Sensor modeling and validation)
 
 ---
 

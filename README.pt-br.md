@@ -1,4 +1,4 @@
-# Estimativa de Grandeza, Velocidade e Aceleração com Filtro de Kalman (AS5600)
+# Estimativa de Grandeza, Velocidade e Aceleração com Filtro de Kalman
 
 *Leia em outros idiomas: [English](README.md)*
 
@@ -8,7 +8,7 @@ Este documento detalha o funcionamento conceitual e a implementação prática d
 
 ## 1. Funcionamento Conceitual
 
-### A. Filtro de Kalman 2D (Ângulo e Velocidade)
+### A. Filtro de Kalman 2D (Grandeza e Velocidade)
 O estado do sistema é representado por um vetor de estados bidimensional:
 $$\mathbf{x} = \begin{bmatrix} \theta \\ \omega \end{bmatrix} \begin{matrix} \text{ (Grandeza sendo medida)} \\ \text{ (Velocidade de variação da grandeza)} \end{matrix}$$
 
@@ -25,8 +25,8 @@ $$\mathbf{x} = \begin{bmatrix} \theta \\ \omega \end{bmatrix} \begin{matrix} \te
 
 ---
 
-### B. Filtro de Kalman 3D (Ângulo, Velocidade e Aceleração)
-Para modelar sistemas com dinâmicas mais agressivas ou para obter uma estimativa direta da aceleração angular instantânea, expandimos o vetor de estados para 3 dimensões:
+### B. Filtro de Kalman 3D (Grandeza, Velocidade e Aceleração)
+Para modelar sistemas com dinâmicas mais agressivas ou para obter uma estimativa direta da aceleração instantânea, expandimos o vetor de estados para 3 dimensões:
 $$\mathbf{x} = \begin{bmatrix} \theta \\ \omega \\ \alpha \end{bmatrix} \begin{matrix} \text{ (Grandeza medida)} \\ \text{ (Velocidade de variação da grandeza)} \\ \text{ (Aceleração de variação da grandeza)} \end{matrix}$$
 
 *   **Predição (Modelo Cinemático 3D):**
@@ -39,7 +39,7 @@ $$\mathbf{x} = \begin{bmatrix} \theta \\ \omega \\ \alpha \end{bmatrix} \begin{m
     $$\mathbf{F} = \begin{bmatrix} 1 & \Delta t & \frac{1}{2}\Delta t^2 \\ 0 & 1 & \Delta t \\ 0 & 0 & 1 \end{bmatrix}$$
 
 *   **Matriz de Medição $\mathbf{H}$:**
-    Como apenas o ângulo $\theta$ é medido fisicamente pelo sensor AS5600:
+    Como apenas a grandeza $\theta$ é medida fisicamente pelo sensor:
     $$\mathbf{H} = \begin{bmatrix} 1 & 0 & 0 \end{bmatrix}$$
 
 *   **Equações da Covariância de Predição ($\mathbf{P}_{k|k-1} = \mathbf{F} \mathbf{P}_{k-1} \mathbf{F}^T + \mathbf{Q}$):**
@@ -70,7 +70,7 @@ $$\mathbf{x} = \begin{bmatrix} \theta \\ \omega \\ \alpha \end{bmatrix} \begin{m
 O parâmetro $R$ define a variância do ruído elétrico/magnético de leitura do sensor.
 *   **Cálculo pelo Datasheet:** Por exemplo, no caso do sensor AS5600, o ruído RMS (1-Sigma) é de $0.06^\circ$. Assim, a variância ideal correspondente é:
     $$R = (0.06^\circ)^2 = 0.0036\text{ (graus)}^2$$
-*   **Ajuste Prático:** Para lidar com folgas mecânicas, vibração e excentricidades do ímã no mundo real, o firmware foi sintonizado com:
+*   **Ajuste Prático:** Para lidar com folgas mecânicas, vibrações e imperfeições do sensor no mundo real, o filtro (quando sintonizado para o AS5600) foi configurado com:
     $$R \approx 0.018\text{ (graus)}^2$$
 
 ### Ruído de Processo ($\mathbf{Q}$)
@@ -123,11 +123,12 @@ Diferente de conteúdos superficiais voltados apenas para cliques, este reposit�
 
 ---
 
-## 🛠️ Tecnologias
-- **Hardware Target:** ESP32 / ESP32-S3
-- **Framework:** ESP-IDF v5.x / v6.x
-- **Linguagem:** C / C++
-- **Simulação:** LTSpice (Modelagem de Sensores)
+## 🛠️ Tecnologias e Compatibilidade
+- **Linguagem:** C puro (C99 ou superior) e C++
+- **Hardware Alvo:** Qualquer microcontrolador (ESP32, STM32, ARM Cortex, RISC-V, AVR, etc.) ou arquitetura desktop
+- **Ambientes/RTOS:** ESP-IDF (como Componente nativo), Zephyr RTOS, FreeRTOS, Bare-metal, Desktop (Windows, Linux, macOS)
+- **Build System:** CMake nativo
+- **Simulação:** LTSpice (Modelagem e validação de sensores)
 
 ---
 
