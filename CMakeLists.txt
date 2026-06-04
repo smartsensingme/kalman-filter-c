@@ -10,4 +10,7 @@ else()
     # Standard CMake (Zephyr, STM32, Desktop, etc.)
     add_library(kalman STATIC kalman.c)
     target_include_directories(kalman PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+    target_link_libraries(kalman PUBLIC zephyr_interface)
+    add_dependencies(kalman zephyr_generated_headers)
 endif()
+
